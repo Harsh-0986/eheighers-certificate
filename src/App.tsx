@@ -1,10 +1,13 @@
-import { Button } from "@/components/ui/button";
+import { Route, Routes } from "react-router-dom";
+import { AdminLogin, AdminDashboard } from "./components/custom";
 
 function App() {
   return (
-    <main>
-      <Button>Hello</Button>
-      <div>Hello world!</div>
+    <main className="flex h-screen w-screen">
+      <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+      </Routes>
     </main>
   );
 }
