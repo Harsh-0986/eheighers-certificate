@@ -6,26 +6,37 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "../ui/table";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import moment from "moment";
+import { Timestamp as TimeStampType } from "@firebase/firestore-types";
+
+type Certificate = {
+  "Event Name": string;
+  "Issued On": TimeStampType;
+  Name: string;
+  Role: string;
+  "Roll Number": string;
+  id?: string;
+  ""?: string;
+};
 
 const CertificatesTable = () => {
   const headerKeys = ["Event Name", "Issued On", "Name", "Role", "Roll Number"];
 
-  const [certificates, setCertificates] = useState();
+  const [certificates, setCertificates] = useState<null | Certificate[]>();
 
   useEffect(() => {
     async function getCertificates() {
       const certificateRef = await getDocs(collection(db, "EventCertificates"));
-      const certificateRecords = [];
+      const certificateRecords: Certificate[] | [] = [];
 
       certificateRef.forEach((doc) => {
         const data = doc.data();
         const certificate = { id: doc.id, ...data };
-        console.log(certificate["Issued On"]);
+        //@ts-ignore
         certificateRecords.push(certificate);
       });
 

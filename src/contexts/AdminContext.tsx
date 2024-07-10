@@ -15,6 +15,7 @@ type INITIAL_ADMIN_STATE_TYPE = {
 
 const INITIAL_STATE = {
   ...INITIAL_ADMIN_STATE,
+  //@ts-ignore
   loginAdmin: (username: string, password: string) => {},
 };
 

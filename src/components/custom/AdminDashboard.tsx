@@ -1,22 +1,34 @@
 import { Navigate } from "react-router-dom";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { useAdminContext } from "../../contexts/AdminContext";
 import { AlertCircle } from "lucide-react";
 import CertificatesTable from "./CertificatesTable";
 import { Input } from "../ui/input";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { collection, doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { Timestamp as TimeStampType } from "@firebase/firestore-types";
 import moment from "moment";
 import { db } from "../../firebase";
+
+type Certificate = {
+  "Event Name": string;
+  "Issued On": TimeStampType;
+  Name: string;
+  Role: string;
+  "Roll Number": string;
+  ID?: string;
+  ""?: string;
+};
 
 const AdminDashboard = () => {
   const admin = useAdminContext();
   const [file, setFile] = useState<File | undefined | null>();
-  const [certificates, setCertificates] = useState([]);
+  const [certificates, setCertificates] = useState<null | Certificate[]>(null);
 
   useEffect(() => {
     async function addData() {
+      if (!certificates) return;
       for (let i = 0; i < certificates.length; i++) {
         const certificate = certificates[i];
         const docData = {
@@ -26,12 +38,11 @@ const AdminDashboard = () => {
           ),
         };
 
-        console.log(docData["Issued On"]);
-
         delete docData["ID"];
         delete docData[""];
 
         if (!docData.Name) return;
+        //@ts-ignore
         await setDoc(doc(db, "EventCertificates", certificate["ID"]), docData, {
           merge: true,
         });
@@ -51,28 +62,35 @@ const AdminDashboard = () => {
     }
   };
 
-  const csvFileToArray = (string) => {
+  const csvFileToArray = (string: string) => {
     const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
     const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
 
     const array = csvRows.map((i) => {
       const values = i.split(",");
       const obj = csvHeader.reduce((object, header, index) => {
+        //@ts-expect-error Types don't match
         object[header.trim()] = values[index];
         return object;
       }, {});
       return obj;
     });
 
+    //@ts-expect-error Types don't match
     setCertificates(array);
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
 
     if (file) {
       fileReader.onload = function (event) {
+        if (!event) return;
+        if (!event.target) return;
         const csvOutput = event.target.result;
+        //@ts-expect-error Types don't match
         csvFileToArray(csvOutput);
       };
       fileReader.readAsText(file);
