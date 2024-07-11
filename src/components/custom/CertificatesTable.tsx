@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -12,6 +11,8 @@ import { db } from "../../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import moment from "moment";
 import { Timestamp as TimeStampType } from "@firebase/firestore-types";
+import { DeleteIcon, Edit } from "lucide-react";
+import { Button } from "../ui/button";
 
 type Certificate = {
   "Event Name": string;
@@ -24,7 +25,14 @@ type Certificate = {
 };
 
 const CertificatesTable = () => {
-  const headerKeys = ["Event Name", "Issued On", "Name", "Role", "Roll Number"];
+  const headerKeys = [
+    "ID",
+    "Event Name",
+    "Issued On",
+    "Name",
+    "Role",
+    "Roll Number",
+  ];
 
   const [certificates, setCertificates] = useState<null | Certificate[]>();
 
@@ -48,28 +56,42 @@ const CertificatesTable = () => {
 
   return (
     <Table className="w-[calc(100vw - 8rem)] overflow-scroll">
-      <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow key={"header"}>
+          <TableHead className="w-[100px]">S. no</TableHead>
           {headerKeys.map((key) => (
             <TableHead className="w-[100px]">{key}</TableHead>
           ))}
+          <TableHead className="w-[100px]">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {certificates?.map((certificate) => {
-          console.log(certificate);
+        {certificates?.map((certificate, idx) => {
           return (
             <TableRow>
-              <TableCell>{certificate["Event Name"]}</TableCell>
-              <TableCell>
+              <TableCell className="truncate">{idx + 1}</TableCell>
+              <TableCell className="truncate">{certificate["id"]}</TableCell>
+              <TableCell className="truncate">
+                {certificate["Event Name"]}
+              </TableCell>
+              <TableCell className="truncate">
                 {moment(certificate["Issued On"].seconds * 1000).format(
                   "MMMM Do YYYY"
                 )}
               </TableCell>
-              <TableCell>{certificate["Name"]}</TableCell>
-              <TableCell>{certificate["Role"]}</TableCell>
-              <TableCell>{certificate["Roll Number"]}</TableCell>
+              <TableCell className="truncate">{certificate["Name"]}</TableCell>
+              <TableCell className="truncate">{certificate["Role"]}</TableCell>
+              <TableCell className="truncate">
+                {certificate["Roll Number"]}
+              </TableCell>
+              <TableCell className="flex gap-2">
+                <Button variant="outline">
+                  <Edit className="w-4 h-4" />
+                </Button>
+                <Button variant="destructive">
+                  <DeleteIcon className="w-4 h-4" />
+                </Button>
+              </TableCell>
             </TableRow>
           );
         })}

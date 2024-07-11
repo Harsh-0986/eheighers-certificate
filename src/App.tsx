@@ -1,5 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import { AdminLogin, AdminDashboard } from "./components/custom";
+import {
+  AdminLogin,
+  AdminDashboard,
+  VerifyDashboard,
+} from "./components/custom";
 
 function App() {
   return (
@@ -7,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/verify" element={<VerifyDashboard />} />
       </Routes>
     </main>
   );
