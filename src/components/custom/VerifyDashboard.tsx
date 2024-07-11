@@ -5,14 +5,7 @@ import { doc, DocumentData, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useToast } from "../ui/use-toast";
 import moment from "moment";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "../ui/table";
 
 const VerifyDashboard = () => {
   const { toast } = useToast();
