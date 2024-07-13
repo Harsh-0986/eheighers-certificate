@@ -18,10 +18,10 @@ const AdminLogin = () => {
 
   return (
     <section
-      className="flex items-center justify-center w-screen"
+      className="flex items-center justify-center w-screen p-4"
       id="admin-login"
     >
-      <div className="px-4 py-12 w-1/4 flex flex-col gap-2 border rounded-md border-zinc-800">
+      <div className="px-4 py-12 w-full md:w-1/4 flex flex-col gap-2 border rounded-md border-zinc-800">
         <Input
           type="text"
           name="Username"

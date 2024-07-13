@@ -2,9 +2,10 @@ import { useContext, useState } from "react";
 import { createContext } from "react";
 
 const INITIAL_ADMIN_STATE = {
-  username: null,
-  password: null,
-  isLoggedIn: false,
+  ...JSON.parse(
+    localStorage.getItem("admin") ||
+      "{username: null, password: null, isLoggedIn: false}"
+  ),
 };
 
 type INITIAL_ADMIN_STATE_TYPE = {
@@ -42,6 +43,10 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
         password,
         isLoggedIn: true,
       });
+      localStorage.setItem(
+        "admin",
+        JSON.stringify({ username, password, isLoggedIn: true })
+      );
       return;
     }
 
@@ -51,6 +56,10 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
         password,
         isLoggedIn: false,
       });
+      localStorage.setItem(
+        "admin",
+        JSON.stringify({ username, password, isLoggedIn: false })
+      );
       return;
     }
   };

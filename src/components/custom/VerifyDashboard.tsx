@@ -25,12 +25,14 @@ const VerifyDashboard = () => {
         title: "Uh oh! The Certificate does not exists.",
         description: "Please check the Certificate ID again.",
       });
+
+      setCertificate(null);
     }
   };
 
   return (
     <section className="w-screen p-3 flex flex-col gap-4 items-center justify-center">
-      <div className="p-8 md:w-1/3 border rounded-md flex flex-col items-center justify-center gap-2">
+      <div className="p-8 w-full md:w-1/3 border rounded-md flex flex-col items-center justify-center gap-2">
         <Input
           type="text"
           id="certificateId"
@@ -44,24 +46,31 @@ const VerifyDashboard = () => {
       </div>
 
       {certificate && (
-        <div className="h-2/3 px-12 py-4 w-4/6 rounded-md  flex flex-col gap-2 items-center justify-center border text-center">
+        <div className="w-full h-2/3 px-12 py-4 md:w-4/6 rounded-md  flex flex-col gap-2 items-center justify-center border text-center">
           <Table>
             <TableBody>
               <TableRow>
                 <TableHead className="font-bold">Event Name: </TableHead>
-                <TableCell> {certificate["Event Name"]}</TableCell>
+                <TableCell className="text-truncate">
+                  {" "}
+                  {certificate["Event Name"]}
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead className="font-bold">Roll Number: </TableHead>
-                <TableCell>{certificate["Roll Number"]}</TableCell>
+                <TableCell className="text-truncate">
+                  {certificate["Roll Number"]}
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead className="font-bold">Name: </TableHead>
-                <TableCell>{certificate["Name"]}</TableCell>
+                <TableCell className="text-truncate">
+                  {certificate["Name"]}
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead className="font-bold">Issued On: </TableHead>
-                <TableCell>
+                <TableCell className="text-truncate">
                   {moment(certificate["Issued On"].seconds * 1000).format(
                     "MMMM Do YYYY"
                   )}
@@ -69,7 +78,9 @@ const VerifyDashboard = () => {
               </TableRow>
               <TableRow>
                 <TableHead className="font-bold">Role: </TableHead>
-                <TableCell>{certificate["Role"]}</TableCell>
+                <TableCell className="text-truncate">
+                  {certificate["Role"]}
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>

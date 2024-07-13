@@ -47,6 +47,7 @@ const AdminDashboard = () => {
           merge: true,
         });
       }
+      location.reload();
     }
 
     addData();

@@ -8,11 +8,23 @@ import {
 } from "../ui/table";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import moment from "moment";
 import { Timestamp as TimeStampType } from "@firebase/firestore-types";
-import { DeleteIcon, Edit } from "lucide-react";
-import { Button } from "../ui/button";
+import { DeleteIcon } from "lucide-react";
+import { buttonVariants } from "../ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import { cn } from "../../lib/utils";
 
 type Certificate = {
   "Event Name": string;
@@ -54,6 +66,13 @@ const CertificatesTable = () => {
     getCertificates();
   }, []);
 
+  const deleteEntry = async (id: string) => {
+    if (id === "") return;
+
+    await deleteDoc(doc(db, "EventCertificates", id));
+    location.reload();
+  };
+
   return (
     <Table className="w-[calc(100vw - 8rem)] overflow-scroll">
       <TableHeader>
@@ -68,7 +87,7 @@ const CertificatesTable = () => {
       <TableBody>
         {certificates?.map((certificate, idx) => {
           return (
-            <TableRow>
+            <TableRow key={certificate.id}>
               <TableCell className="truncate">{idx + 1}</TableCell>
               <TableCell className="truncate">{certificate["id"]}</TableCell>
               <TableCell className="truncate">
@@ -84,13 +103,36 @@ const CertificatesTable = () => {
               <TableCell className="truncate">
                 {certificate["Roll Number"]}
               </TableCell>
+
               <TableCell className="flex gap-2">
-                <Button variant="outline">
-                  <Edit className="w-4 h-4" />
-                </Button>
-                <Button variant="destructive">
-                  <DeleteIcon className="w-4 h-4" />
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger
+                    className={cn(buttonVariants({ variant: "destructive" }))}
+                  >
+                    <DeleteIcon className="w-4 h-4" />
+                  </AlertDialogTrigger>
+
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your account and remove your data from our
+                        servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => deleteEntry(certificate["id"] || "")}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </TableCell>
             </TableRow>
           );
