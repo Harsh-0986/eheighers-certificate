@@ -108,17 +108,25 @@ const AdminDashboard = () => {
           it soon.
         </AlertDescription>
       </Alert>
-      <form className="py-3 flex justify-end w-full items-center gap-1.5">
-        <Input
-          id="database"
-          type="file"
-          accept={".csv"}
-          onChange={handleOnChange}
-        />{" "}
-        <Button type="submit" onClick={(e) => handleOnSubmit(e)}>
-          Submit
+      <div className="flex gap-1.5 items-center justify-center">
+        <form className="py-3 flex justify-end w-full items-center gap-1.5">
+          <Input
+            id="database"
+            type="file"
+            accept={".csv"}
+            onChange={handleOnChange}
+          />{" "}
+          <Button type="submit" onClick={(e) => handleOnSubmit(e)}>
+            Submit
+          </Button>
+        </form>
+        <Button
+          variant={"destructive"}
+          onClick={() => admin.loginAdmin("", "")}
+        >
+          Logout
         </Button>
-      </form>
+      </div>
       <CertificatesTable />
     </section>
   );

@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useAdminContext } from "../../contexts/AdminContext";
 import { Navigate } from "react-router-dom";
+import GoogleIcon from "../../assets/google.svg";
 
 const AdminLogin = () => {
   const [username, setUsername] = useState("");
@@ -18,10 +19,12 @@ const AdminLogin = () => {
 
   return (
     <section
-      className="flex items-center justify-center w-screen p-4"
+      className="flex flex-col items-center justify-center w-screen p-4"
       id="admin-login"
     >
-      <div className="px-4 py-12 w-full md:w-1/4 flex flex-col gap-2 border rounded-md border-zinc-800">
+      <div className="px-4 py-8 w-full md:w-1/3  gap-2 border rounded-md border-zinc-800 flex flex-col items-center justify-center">
+        <img src="/logo.png" alt="logo" className="h-32 w-32" />
+        <span className="text-xl pb-3 font-semibold">Admin Login</span>
         <Input
           type="text"
           name="Username"
@@ -39,6 +42,17 @@ const AdminLogin = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button onClick={() => handleLogin()}>Login</Button>
+
+        <div className="flex items-center justify-center w-full gap-1.5 mt-3">
+          <div className="w-[95%] flex-grow  bg-zinc-400 h-1 rounded-md"></div>
+          <div className="text-bg-zinc-400 font-sm">OR</div>
+          <div className="flex-grow h-1 w-[95%] rounded-md  bg-zinc-400"></div>
+        </div>
+
+        <Button className="flex w-full px-4 py-2 items-center justify-center rounded-md gap-2">
+          <img src={GoogleIcon} className="h-6 w-6" />
+          <span> Sign In with Google</span>
+        </Button>
       </div>
     </section>
   );

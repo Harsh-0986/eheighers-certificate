@@ -46,7 +46,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    if (username === null && password === null) {
+    if (username === "" && password === "") {
       setAdmin({
         username,
         password,
