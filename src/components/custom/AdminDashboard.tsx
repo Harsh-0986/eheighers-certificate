@@ -1,12 +1,18 @@
 import { Navigate } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { useAdminContext } from "../../contexts/AdminContext";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, DownloadIcon } from "lucide-react";
 import CertificatesTable from "./CertificatesTable";
 import { Input } from "../ui/input";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { Timestamp as TimeStampType } from "@firebase/firestore-types";
 import moment from "moment";
 import { db } from "../../firebase";
@@ -34,7 +40,7 @@ const AdminDashboard = () => {
         const docData = {
           ...certificate,
           "Issued On": Timestamp.fromDate(
-            moment(certificate["Issued On"], "DD/MM/YY").toDate()
+            moment(certificate["Issued On"], "DD-MM-YYYY").toDate()
           ),
         };
 
@@ -81,6 +87,38 @@ const AdminDashboard = () => {
     setCertificates(array);
   };
 
+  const exportAsCSV = async () => {
+    const certificateRef = await getDocs(collection(db, "EventCertificates"));
+    const certificateRecords: Certificate[] | [] = [];
+
+    certificateRef.forEach((doc) => {
+      const data = doc.data();
+      const certificate = { ID: doc.id, ...data };
+      //@ts-ignore
+      certificateRecords.push(certificate);
+    });
+
+    const csvContent =
+      "data:text/csv;charset=utf-8,\n Certificate ID, Event Name, Issued On, Name, Role, Roll Number\n" +
+      certificateRecords
+        .map((e) =>
+          [
+            e.ID,
+            e["Event Name"],
+            moment(e["Issued On"].seconds * 1000).format("DD-MM-YYYY"),
+            e.Name,
+            e.Role,
+            e["Roll Number"],
+          ].join(",")
+        )
+        .join("\n");
+
+    console.log(csvContent);
+
+    const encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
+  };
+
   const handleOnSubmit = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -120,6 +158,14 @@ const AdminDashboard = () => {
             Submit
           </Button>
         </form>
+        <Button
+          variant="outline"
+          className="flex gap-1"
+          onClick={() => exportAsCSV()}
+        >
+          <DownloadIcon className="h-4 w-4" />
+          Export as CSV
+        </Button>
         <Button
           variant={"destructive"}
           onClick={() => admin.loginAdmin("", "")}

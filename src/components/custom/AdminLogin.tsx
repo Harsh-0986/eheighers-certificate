@@ -22,7 +22,7 @@ const AdminLogin = () => {
       className="flex flex-col items-center justify-center w-screen p-4"
       id="admin-login"
     >
-      <div className="px-4 py-8 w-full md:w-1/3  gap-2 border rounded-md border-zinc-800 flex flex-col items-center justify-center">
+      <div className="px-4 py-8 w-full md:w-1/3 shadow-2xl gap-2 rounded-md  border-zinc-900 flex flex-col items-center justify-center">
         <img src="/logo.png" alt="logo" className="h-32 w-32" />
         <span className="text-xl pb-3 font-semibold">Admin Login</span>
         <Input
@@ -44,9 +44,9 @@ const AdminLogin = () => {
         <Button onClick={() => handleLogin()}>Login</Button>
 
         <div className="flex items-center justify-center w-full gap-1.5 mt-3">
-          <div className="w-[95%] flex-grow  bg-zinc-400 h-1 rounded-md"></div>
+          <div className="w-[95%] flex-grow  bg-zinc-800/[0.9] h-[1.9px] rounded-md"></div>
           <div className="text-bg-zinc-400 font-sm">OR</div>
-          <div className="flex-grow h-1 w-[95%] rounded-md  bg-zinc-400"></div>
+          <div className="flex-grow h-[1.9px] w-[95%] rounded-md  bg-zinc-800/[0.9]"></div>
         </div>
 
         <Button className="flex w-full px-4 py-2 items-center justify-center rounded-md gap-2">
